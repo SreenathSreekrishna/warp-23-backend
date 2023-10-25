@@ -15,7 +15,7 @@ def index():
     return jsonify({"ip":request.remote_addr})
 
 
-@app.route('/verify')
+@app.route('/verify', methods=['POST'])
 @cross_origin()
 def verify():
     cs = request.form.get('callsign')
