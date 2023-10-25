@@ -20,10 +20,10 @@ def index():
 def verify():
     cs = request.form.get('callsign')
     p = request.form.get('phrase')
-    print(cs,p)
     p = sha512(p.encode()).hexdigest()
     if p != SECRET_PHRASE:
         return jsonify({"auth":False})
+    print('secret authed')
     r = cur.execute('SELECT * FROM users WHERE callSign=?', (cs, )).fetchall()
     if not r:
         return jsonify({"auth":False})
