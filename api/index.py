@@ -23,8 +23,8 @@ def verify():
     p = sha512(p.encode()).hexdigest()
     if p != SECRET_PHRASE:
         return jsonify({"auth":False})
-    print('secret authed')
     r = cur.execute('SELECT * FROM users WHERE callSign=?', (cs, )).fetchall()
+    print(r)
     if not r:
         return jsonify({"auth":False})
     return jsonify({"auth":True, "info":r[0]})
