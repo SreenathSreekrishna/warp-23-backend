@@ -28,6 +28,7 @@ def index():
 def cors_allow(thing):
     response = make_response(thing)
     response.headers["Access-Control-Allow-Origin"] = "http://cosmoshield.neevsahay.com"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
     return response
 
 @app.route('/verify', methods=['POST'])
