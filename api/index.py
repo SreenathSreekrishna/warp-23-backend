@@ -19,6 +19,7 @@ def index():
 @cross_origin()
 def verify():
     cookie = request.cookies.get('id')
+    print('my delicious cookie is',cookie)
     if cookie:
         all = cur.execute('SELECT * FROM users').fetchall()
         for row in all:
