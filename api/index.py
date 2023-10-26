@@ -16,7 +16,7 @@ def index():
 
 
 @app.route('/verify', methods=['POST'])
-@cross_origin()
+@cross_origin("cosmoshield.neevsahay.com")
 def verify():
     cookie = request.cookies.get('id')
     print('my delicious cookie is',cookie)
