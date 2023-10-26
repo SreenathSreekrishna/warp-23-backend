@@ -7,16 +7,26 @@ db = sqlite3.connect('api/db.sqlite3')
 cur = db.cursor()
 
 app = Flask(__name__)
+CORS(
+    app,
+    allow_headers="*",
+    supports_credentials=True,
+    expose_headers=[
+        "tokens",
+        "Set-Cookie",
+        "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Credentials",
+    ],
+)
+
 SECRET_PHRASE = "b48e0f65127134eff3b3771b38b07a5806ae41c8a0a073f96f61f1368456b0136c914b4393f3e0c86e77214b5c028aef072052c47cbad6b5fcd96be4b10e0cbc"
 
 @app.route('/')
-@cross_origin(["cosmoshield.neevsahay.com"])
 def index():
     return jsonify({"ip":request.remote_addr})
 
 
 @app.route('/verify', methods=['POST'])
-@cross_origin(["cosmoshield.neevsahay.com"])
 def verify():
     cookie = request.cookies.get('id')
     print('my delicious cookie is',cookie)
