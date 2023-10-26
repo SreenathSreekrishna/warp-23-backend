@@ -18,6 +18,14 @@ def index():
 @app.route('/verify', methods=['POST'])
 @cross_origin()
 def verify():
+    cookie = request.cookies.get('id')
+    if cookie:
+        all = cur.execute('SELECT * FROM users').fetchall()
+        for row in all:
+            hash = sha512((row[1] + SECRET_PHRASE).encode()).hexdigest()
+            if hash == cookie:
+                return jsonify({"auth":True, "info":row, "cookieHash":cookie})
+        return jsonify({"auth":False})
     cs = request.form.get('callsign')
     p = request.form.get('phrase')
     p = sha512(p.encode()).hexdigest()
@@ -27,4 +35,4 @@ def verify():
     print(r)
     if not r:
         return jsonify({"auth":False})
-    return jsonify({"auth":True, "info":r[0]})
+    return jsonify({"auth":True, "info":r[0], "cookieHash":sha512((r[0][1]+SECRET_PHRASE).encode()).hexdigest()})
