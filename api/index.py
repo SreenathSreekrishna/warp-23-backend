@@ -23,6 +23,7 @@ def verify():
         all = cur.execute('SELECT * FROM users').fetchall()
         for row in all:
             hash = sha512((row[1] + SECRET_PHRASE).encode()).hexdigest()
+            print(hash, cookie)
             if hash == cookie:
                 return jsonify({"auth":True, "info":row, "cookieHash":cookie})
         return jsonify({"auth":False})
