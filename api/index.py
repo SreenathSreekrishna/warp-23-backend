@@ -1,4 +1,4 @@
-from flask import Flask,jsonify,request
+from flask import Flask,jsonify,request,make_response
 from flask_cors import cross_origin
 from hashlib import sha512
 import sqlite3
@@ -25,6 +25,10 @@ SECRET_PHRASE = "b48e0f65127134eff3b3771b38b07a5806ae41c8a0a073f96f61f1368456b01
 def index():
     return jsonify({"ip":request.remote_addr})
 
+def cors_allow(thing):
+    response = make_response(thing)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 @app.route('/verify', methods=['POST'])
 def verify():
@@ -36,7 +40,7 @@ def verify():
             hash = sha512((row[1] + SECRET_PHRASE).encode()).hexdigest()
             print(hash, cookie)
             if hash == cookie:
-                return jsonify({"auth":True, "info":row, "cookieHash":cookie})
+                return cors_allow(jsonify({"auth":True, "info":row, "cookieHash":cookie}))
         return jsonify({"auth":False})
     cs = request.form.get('callsign')
     p = request.form.get('phrase')
@@ -47,4 +51,4 @@ def verify():
     print(r)
     if not r:
         return jsonify({"auth":False})
-    return jsonify({"auth":True, "info":r[0], "cookieHash":sha512((r[0][1]+SECRET_PHRASE).encode()).hexdigest()})
+    return cors_allow(jsonify({"auth":True, "info":r[0], "cookieHash":sha512((r[0][1]+SECRET_PHRASE).encode()).hexdigest()}))
