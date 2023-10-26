@@ -1,5 +1,5 @@
 from flask import Flask,jsonify,request,make_response
-from flask_cors import cross_origin
+from flask_cors import cross_origin,CORS
 from hashlib import sha512
 import sqlite3
 
